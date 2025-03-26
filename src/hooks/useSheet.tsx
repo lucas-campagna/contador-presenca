@@ -2,7 +2,6 @@ import { useContext } from "solid-js";
 import { sheetContext } from "../context/Sheet";
 
 function useSheet() {
-  const sheet = useContext(sheetContext);
-  return sheet;
+  return useContext(sheetContext);
 }
 export default useSheet;
