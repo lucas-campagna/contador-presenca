@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@lprett/gsheetdb": "^1.2.0",
+    "@lprett/gsheetdb": "^1.2.4",
     "@solidjs/router": "^0.15.3",
     "@tailwindcss/vite": "^4.0.15",
     "solid-js": "^1.9.5",

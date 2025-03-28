@@ -1,38 +1,30 @@
-import { createResource, Match, Show, Switch } from "solid-js";
+import { createEffect, createMemo, Match, Switch } from "solid-js";
 import useSheet from "../hooks/useSheet";
 import useIsLoading from "../hooks/useIsloading";
 
 function Home() {
-    const setIsLoading = useIsLoading();
-    (window as any).setIsLoading = setIsLoading;
-    const sheet = useSheet();
+  const setIsLoading = useIsLoading();
+  const { alunos, tables, me } = useSheet();
 
-    const [tables] = createResource(
-        sheet,
-        sheet => sheet?.tables?.(),
-    );
-
-    const [me] = createResource(
-        sheet,
-        sheet => sheet?.me?.() ?? {
-            id: 'abc123',
-            token: 'abc123',
-            permission: 'admin',
-        },
-    );
-
-    const hasData = [me, tables].reduce((acc, curr) => acc && !curr.loading && !curr.error, true);
-    return (
-        <Show when={hasData}>
-            <Switch>
-                <Match when={me()?.permission === 'admin'}>
-                    Admin
-                </Match>
-                <Match when={me()?.permission === 'user'}>
-                    User
-                </Match>
-            </Switch>
-        </Show>
+  const hasData = createMemo(() =>
+    [me, tables].reduce(
+      (acc, curr) => acc && !curr.loading && !curr.error && !!curr(),
+      true
     )
+  );
+  createEffect(() => {
+    console.log(hasData());
+    setIsLoading(!hasData());
+  });
+  return (
+    <Switch>
+      <Match when={me()?.permission === "admin"}>
+        Admin
+        <br />
+        {JSON.stringify(alunos())}
+      </Match>
+      <Match when={me()?.permission === "user"}>User</Match>
+    </Switch>
+  );
 }
 export default Home;

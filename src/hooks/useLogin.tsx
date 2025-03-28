@@ -15,12 +15,12 @@ function useLogin(): Accessor<TCredentials> {
     const [deploymentId, token] = ((searchParams.code as string) ?? "").split(
       ":"
     );
-    localStorage.setItem("code", JSON.stringify({deploymentId, token}));
-    console.debug('new credentials')
+    localStorage.setItem("code", JSON.stringify({ deploymentId, token }));
+    console.debug("new credentials");
     setCredentials({ deploymentId, token });
   } else if (localCode) {
-    const {deploymentId, token} = JSON.parse(localCode);
-    console.debug('local credentials')
+    const { deploymentId, token } = JSON.parse(localCode);
+    console.debug("local credentials");
     setCredentials({ deploymentId, token });
   }
   return credentials;

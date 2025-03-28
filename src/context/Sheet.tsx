@@ -21,20 +21,22 @@ function SheetContextProvider(props: SheetContextProviderProps) {
   const [sheet, setSheet] = createSignal<any>(defaultSheetValue);
   const { deploymentId, token } = props.credentials();
   if (!deploymentId || !token) {
-    console.debug('no credentials');
+    console.debug("no credentials");
     throw false;
   }
-  console.debug('credentials found');
+  console.debug("credentials found");
   createEffect(() => {
     const newSheet = new Sheet({
       deploymentId,
       token,
-    })
+    });
     setSheet(newSheet);
-  })
+  });
 
   return (
-    <sheetContext.Provider value={sheet}>{props.children}</sheetContext.Provider>
+    <sheetContext.Provider value={sheet}>
+      {props.children}
+    </sheetContext.Provider>
   );
 }
 
