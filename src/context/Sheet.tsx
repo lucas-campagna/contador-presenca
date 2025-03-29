@@ -6,11 +6,9 @@ import {
   createEffect,
 } from "solid-js";
 import { TCredentials } from "../hooks/useLogin";
-// @ts-ignore
 import Sheet from "@lprett/gsheetdb";
 
-const defaultSheetValue = () => ({});
-const sheetContext = createContext<Accessor<any>>(defaultSheetValue);
+const sheetContext = createContext<Accessor<Sheet>>((() => ({})) as Accessor<Sheet>);
 
 type SheetContextProviderProps = {
   credentials: Accessor<TCredentials>;
@@ -18,7 +16,7 @@ type SheetContextProviderProps = {
 };
 
 function SheetContextProvider(props: SheetContextProviderProps) {
-  const [sheet, setSheet] = createSignal<any>(defaultSheetValue);
+  const [sheet, setSheet] = createSignal<Sheet>({} as Sheet);
   const { deploymentId, token } = props.credentials();
   if (!deploymentId || !token) {
     console.debug("no credentials");

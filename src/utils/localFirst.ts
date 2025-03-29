@@ -1,14 +1,18 @@
-import { createResource, ResourceFetcher } from "solid-js";
+import { Accessor, createResource, ResourceFetcher, ResourceReturn, ResourceSource } from "solid-js";
 
-type TFetcher<T = any, R = any> = (source: T) => R;
+type TFetcher<S, T> = typeof createResource<S, T>['arguments']['fetcher'];
+type TSources<S, T> = {
+  [key: string]: TFetcher<S, T>;
+};
 
-const baseKey = "resources";
+const baseKey = "tables";
 
-const createLocalFirstFetcher = (
-  key: string,
-  fetcher: TFetcher
-): ResourceFetcher<any, any, any> =>
-  ((source, { refetching }) => {
+const createLocalFirstFetcher =
+  <S, T>(
+    key: string,
+    fetcher: TFetcher<S, T>
+  ): ResourceFetcher<S, T, boolean> =>
+  (source, { refetching }) => {
     const accessKey = `${baseKey}::${key}`;
     const downloadAndUpdateLocalData = async () => {
       const result = (await fetcher(source)) ?? null;
@@ -23,12 +27,19 @@ const createLocalFirstFetcher = (
       return localData;
     }
     return downloadAndUpdateLocalData();
-  }) as ResourceFetcher<any, any, boolean>;
-
-const createLocalFirstResource = (
+  };
+const createLocalFirstResource = <S, T>(
   key: string,
-  source: unknown,
-  fetcher: TFetcher
+  source: S,
+  fetcher: TFetcher<S, T>
 ) => createResource(source, createLocalFirstFetcher(key, fetcher));
+
+export const createLocalFirstResources = <S, T>(source: S, sources: TSources<S, T>) =>
+  Object.fromEntries(
+    Object.entries(sources).map(([name, callback]) => [
+      name,
+      createLocalFirstResource(name, source, callback),
+    ])
+  );
 
 export default createLocalFirstResource;
