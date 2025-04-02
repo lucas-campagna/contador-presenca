@@ -7,6 +7,7 @@ export type TAction = { [key: string]: TEvent | TAction };
 
 export type ActionButtonsProps = {
   actions: TAction;
+  title?: string;
 };
 
 function ActionButton(props: ActionButtonsProps) {
@@ -14,7 +15,7 @@ function ActionButton(props: ActionButtonsProps) {
   const owner = getOwner();
   function handleOnClick() {
     runWithOwner(owner, () =>
-      setDialog(<DialogList items={props.actions} />)
+      setDialog(<DialogList title={props.title} items={props.actions} />)
     );
   }
 

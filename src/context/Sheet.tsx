@@ -19,10 +19,8 @@ function SheetContextProvider(props: SheetContextProviderProps) {
   const [sheet, setSheet] = createSignal<Sheet>({} as Sheet);
   const { deploymentId, token } = props.credentials();
   if (!deploymentId || !token) {
-    console.debug("no credentials");
     throw false;
   }
-  console.debug("credentials found");
   createEffect(() => {
     const newSheet = new Sheet({
       deploymentId,
@@ -30,7 +28,6 @@ function SheetContextProvider(props: SheetContextProviderProps) {
     });
     setSheet(newSheet);
   });
-
   return (
     <sheetContext.Provider value={sheet}>
       {props.children}

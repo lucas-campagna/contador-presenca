@@ -1,27 +1,81 @@
-import { Accessor, createMemo } from "solid-js";
-import useSheet, { TStudent } from "../hooks/useSheet";
+import { createEffect, createSignal, lazy, Match, Switch } from "solid-js";
+import useSheet from "../hooks/useSheet";
+import useIsLoading from "../hooks/useIsloading";
+import ActionButton from "./ActionButton";
 import useDialog from "../hooks/useDialog";
 
-function Admin(props: any) {
-    const { presencas, professor } = useSheet();
+const Presenca = lazy(() => import("../routes/Presenca"));
+const Aluno = lazy(() => import("../routes/Aluno"));
+const Professor = lazy(() => import("../routes/Professor"));
+const Nav = lazy(() => import("./Nav"));
 
-    const setContent = useDialog();
+function Admin() {
+  const [page, setPage] = createSignal("presenca");
+  const { refetch, alunos, classes, presencas, professores } = useSheet();
+  const setIsLoading = useIsLoading();
+  const { hideDialog } = useDialog();
 
-    setContent(<div>Adicionar Aluno</div>);
+  function refetchAll() {
+    refetch.alunos();
+    refetch.classes();
+    refetch.presencas();
+    refetch.professores();
+    hideDialog();
+    setIsLoading(true);
+  }
 
-    const classe = createMemo(() => professor()?.classe);
-    const alunos = createMemo(() => classe?.()?.aluno?.split(','));
+  createEffect(() => {
+    const allReady =
+      !alunos.loading &&
+      !classes.loading &&
+      !presencas.loading &&
+      !professores.loading;
+    if (allReady) {
+      setIsLoading(false);
+    }
+  });
 
-    return (
-        <div class="flex flex-col justify-center items-center w-1/1 max-w-3xl">
-            <div class="flex flex-col justify-center items-center w-1/1 h-1/1">
-                {JSON.stringify(professor())}
-                <div class="flex flex-row gap-4">
-                    <button>Adicionar Aluno</button>
-                    <button>Adicionar Professor</button>
-                </div>
-            </div>
-        </div>
-    );
+  return (
+    <>
+      <ActionButton
+        actions={{
+          atualizar: refetchAll,
+          adicionar: () => alert("Ainda não implementado"),
+        }}
+      />
+      <div class="flex flex-col justify-center items-center w-1/1 max-w-3xl mb-20">
+        <Switch>
+          <Match when={page() === "presenca"}>
+            <Presenca />
+          </Match>
+          <Match when={page() === "aluno"}>
+            <Aluno />
+          </Match>
+          <Match when={page() === "professor"}>
+            <Professor />
+          </Match>
+        </Switch>
+      </div>
+      <Nav
+        actions={[
+          {
+            label: "Presença",
+            onClick: () => setPage("presenca"),
+            selected: page() === "presenca",
+          },
+          {
+            label: "Aluno",
+            onClick: () => setPage("aluno"),
+            selected: page() === "aluno",
+          },
+          {
+            label: "Professor",
+            onClick: () => setPage("professor"),
+            selected: page() === "professor",
+          },
+        ]}
+      />
+    </>
+  );
 }
 export default Admin;

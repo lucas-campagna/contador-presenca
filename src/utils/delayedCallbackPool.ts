@@ -1,4 +1,4 @@
-const defaultDelay = 5_000;
+const defaultDelay = 1_000;
 
 type CallbackType<T = any, R = any> = (d: T[]) => R;
 
@@ -6,7 +6,7 @@ type TCallbackPool<T = any, R = any> = {
   check?: (d: T) => boolean;
   call: (d: T) => R;
 };
-export function createDelayedCallbackPools(
+export function createDelayedCallbackPools<T>(
   callbacks: TCallbackPool | TCallbackPool[],
   delay: number | undefined = undefined
 ) {
@@ -15,8 +15,8 @@ export function createDelayedCallbackPools(
   }
   return callbacks.map((callback) => {
     const pool = new DelayedCallbackPool(callback.call, delay);
-    return (d: any) =>
-      !callback.check ? pool.call(d) : callback.check(d) && pool.call(d);
+    return (d: T) =>
+      !callback.check ? pool.call(d) : (callback.check(d) && pool.call(d));
   });
 }
 
@@ -32,7 +32,7 @@ class DelayedCallbackPool<T> {
     this.#callback = callback;
     this.#delay = delay;
   }
-  call(data: any) {
+  call(data: T) {
     this.#args.push(data);
     clearTimeout(this.#clock);
     return new Promise((r) => {

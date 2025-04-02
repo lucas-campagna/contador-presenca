@@ -1,4 +1,4 @@
-import { createEffect, createMemo, lazy, Match, Switch } from "solid-js";
+import { createEffect, lazy, Match, Switch } from "solid-js";
 import useSheet from "../hooks/useSheet";
 import useIsLoading from "../hooks/useIsloading";
 
@@ -9,17 +9,19 @@ function Home() {
   const setIsLoading = useIsLoading();
   const { me } = useSheet();
 
-  const hasData = createMemo(() => me() && !me.loading && !me.error);
+  createEffect(() => {
+    const hasData = me() && !me.loading && !me.error;
+    setIsLoading(!hasData);
+  });
 
   setIsLoading(true);
-  createEffect(() => setIsLoading(!hasData()));
 
   return (
     <Switch>
-      <Match when={(me() as any)?.permission === "admin"}>
+      <Match when={me()?.permission === "admin"}>
         <Admin />
       </Match>
-      <Match when={(me() as any)?.permission === "user"}>
+      <Match when={me()?.permission === "user"}>
         <User />
       </Match>
     </Switch>

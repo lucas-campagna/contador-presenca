@@ -26,7 +26,7 @@ function Dialog(props: any) {
     <>
       <Show when={isVisible()}>
         <div ref={dialogBlur} class="fixed backdrop-blur-sm w-screen h-screen z-10" onClick={handleBlur}>
-          <div class="fixed -translate-1/2 left-1/2 top-1/2 flex justify-center items-center bg-red-100">
+          <div class="fixed -translate-1/2 left-1/2 top-1/2 flex justify-center items-center">
             {content()}
           </div>
         </div>

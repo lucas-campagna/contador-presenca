@@ -7,7 +7,7 @@ function IsLoadingProvider(props: any) {
   return (
     <>
       <Show when={isLoading()}>
-        <div class="fixed backdrop-blur-sm w-screen h-screen">
+        <div class="fixed backdrop-blur-sm w-screen h-screen z-10">
           <div class="fixed -translate-1/2 left-1/2 top-1/2 rounded-full p-1 bg-sky-100 flex justify-center items-center">
             <div class="relative animate-spin rounded-full size-24 bg-sky-100 flex justify-center items-center overflow-hidden">
               <div class="size-1/1 translate-y-1/2 bg-sky-200" />

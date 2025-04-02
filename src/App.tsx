@@ -9,7 +9,7 @@ function App() {
   return (
     <IsLoadingProvider>
       <HashRouter root={Root}>
-        <Route path="/" component={Home} />
+        <Route path="/" component={Home}/>
       </HashRouter>
     </IsLoadingProvider>
   );
