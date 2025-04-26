@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { getAuth, signInAnonymously } from 'firebase/auth'
 import useFirestore from '../hooks/useFirestore';
 
@@ -14,7 +14,7 @@ interface AuthContextProps {
     logout: () => Promise<void>
 }
 
-const AuthContext = React.createContext<AuthContextProps>({
+export const AuthContext = React.createContext<AuthContextProps>({
     user: null,
     login: async () => { },
     logout: async () => { },
@@ -24,7 +24,7 @@ type AuthProviderProps = {
     children: React.ReactNode
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export default function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User | null>(null);
     const { get: getUser } = useFirestore('usuarios');
 
@@ -63,5 +63,3 @@ export function AuthProvider({ children }: AuthProviderProps) {
         </AuthContext.Provider>
     );
 }
-
-export const useAuth = () => useContext(AuthContext)

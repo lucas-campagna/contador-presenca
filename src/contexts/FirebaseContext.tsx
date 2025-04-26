@@ -17,7 +17,7 @@ type FirebaseProviderProps = {
 }
 
 
-export function FirebaseContextProvider({children}: FirebaseProviderProps) {
+export default function FirebaseContextProvider({children}: FirebaseProviderProps) {
   const firebaseConfig = {
     apiKey: "AIzaSyCswKxqW-evd_LJ7RTlFvbH1FUPpp-iXaE",
     authDomain: "ibconforto-ebd.firebaseapp.com",

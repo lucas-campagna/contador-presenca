@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from './contexts/AuthContext.tsx'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import useAuth from './hooks/useAuth.tsx'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export default function Login() {
+  const [nTries, setNTries] = useState(0);
   const [token, setToken] = useState('')
   const [error, setError] = useState('')
   const { user, login } = useAuth()
@@ -10,7 +11,6 @@ export default function Login() {
   const { token: paramToken } = useParams();
 
   async function tryLogin(token: string) {
-    const [nTries, setNTries] = useState(0);
     setToken('');
     setTimeout(async () => {
       console.log('Trying to login with token', token);
