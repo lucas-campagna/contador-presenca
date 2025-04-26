@@ -1,13 +1,12 @@
-import { HashRouter, Route } from "@solidjs/router";
-import Root from "./routes/Root";
-import Home from "./routes/Home";
+import PWABadge from './PWABadge.tsx'
+import './App.css'
 
 function App() {
   return (
-    <HashRouter root={Root}>
-      <Route path="/" component={Home} />
-    </HashRouter>
-  );
+    <>
+      <PWABadge />
+    </>
+  )
 }
 
-export default App;
+export default App
