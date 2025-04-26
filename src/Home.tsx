@@ -8,6 +8,7 @@ function Home() {
 
     useEffect(() => {
         if (!user) {
+            console.log("User not found, redirecting to login");
             navigate("/login");
         }
     }, [user]);
