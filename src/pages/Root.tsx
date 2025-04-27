@@ -3,8 +3,7 @@ import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
 import { Outlet } from "react-router";
 
-function Home() {
-    console.log("Home");
+function Root() {
     const { user } = useAuth();
     const navigate = useNavigate();
 
@@ -15,8 +14,7 @@ function Home() {
             } else if (user.papel === "admin") {
                 navigate("/admin");
             }
-        }
-        else {
+        } else {
             console.log("User not found, redirecting to login");
             navigate("/login");
         }
@@ -26,15 +24,8 @@ function Home() {
         return null;
     }
 
-    return (
-        <>
-            <div className="flex flex-col items-center justify-center text-center min-h-screen min-w-screen bg-gray-100">
-                Tipo de usuário não encontrado. Contate o administrador
-            </div>
-            <Outlet/>
-        </>
-    );
+    return <Outlet />;
 
 }
 
-export default Home;
+export default Root;
