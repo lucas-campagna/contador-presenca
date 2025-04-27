@@ -8,8 +8,14 @@ export type User = {
     classes: DocumentReference<DocumentData, DocumentData>[],
 }
 
-export type AdminUser = User | {
+export type AdminUser = User & {
+    renameClasse: (key: string, classe: string) => Promise<void>,
     addClasse: (classe: ClasseType) => Promise<void>,
+    rmClasse: (key: ClasseType) => Promise<void>,
+    renameUser: (key: string, user: User) => Promise<void>,
+    bindClasseUser: (classeKey: string, userKey: string) => Promise<void>,
+    addUser: (user: User) => Promise<void>,
+    rmUser: (key: User) => Promise<void>,
 }
 
 export type ClasseType = Modify<RequestedClasseType, {
@@ -32,3 +38,5 @@ export type ProfessorUser = User & {
 }
 
 export type AlunoKeyType = string;
+export type UserKeyType = string;
+export type ClasseKeyType = string;

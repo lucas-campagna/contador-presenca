@@ -1,5 +1,7 @@
+import useAdmin from "../hooks/useAdmin";
+
 function Admin() {
-  console.log("Admin page loaded");
+  useAdmin();
   return (
     <div>
       <h1>Admin</h1>
