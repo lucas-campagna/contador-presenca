@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { getAuth, signInAnonymously } from 'firebase/auth'
 import useFirestore from '../hooks/useFirestore';
+import { User } from '../types';
 
-interface User {
-    token: string,
-    papel: string,
-    nome: string,
-}
-
-interface AuthContextProps {
+export interface AuthContextProps {
     user: User | null
     login: (token: string) => Promise<void>
     logout: () => Promise<void>
@@ -20,7 +15,7 @@ export const AuthContext = React.createContext<AuthContextProps>({
     logout: async () => { },
 })
 
-type AuthProviderProps = {
+export type AuthProviderProps = {
     children: React.ReactNode
 }
 
@@ -35,7 +30,11 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             const cachedUserEncoded = localStorage.getItem('user');
             if (cachedUserEncoded) {
                 const cachedUser = JSON.parse(atob(cachedUserEncoded as string));
-                setUser(cachedUser);
+                const user = await getUser?.(cachedUser.token);
+                setUser({
+                    ...user,
+                    token: cachedUser.token,
+                });
             }
         }
         fetchUser();
@@ -43,13 +42,17 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
     useEffect(() => {
         if (user) {
-            localStorage.setItem('user', btoa(JSON.stringify(user)));
+            localStorage.setItem('user', btoa(JSON.stringify({
+                token: user.token,
+                papel: user.papel,
+                nome: user.nome,
+            })));
         }
     }, [user]);
 
     const login = async (token: string) => {
-        const user = await getUser(token);
-        setUser({...user, token });
+        const user = await getUser?.(token);
+        setUser({ ...user, token });
     };
 
     const logout = async () => {

@@ -1,20 +1,24 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 import AuthProvider from "./contexts/AuthContext";
-import Home from "./Home";
-import Login from "./Login";
+import { Admin, Professor, Home, Login } from "./pages";
 import FirebaseContextProvider from "./contexts/FirebaseContext";
+import DialogProvider from "./contexts/DialogContext";
 
 function App() {
   return (
     <FirebaseContextProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+      <DialogProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/professor" element={<Professor />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </DialogProvider>
     </FirebaseContextProvider>
   )
 }
