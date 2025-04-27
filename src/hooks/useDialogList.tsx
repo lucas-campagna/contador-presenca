@@ -39,7 +39,7 @@ function DialogList({ title, items }: DialogListProps) {
 const useDialogList = () => {
     const { setDialog, clearDialog } = useDialog();
 
-    function openDialogList(title: string, items: TItems) {
+    function openDialogList({title, items}: DialogListProps) {
         setDialog(<DialogList title={title} items={items} />);
     }
 
