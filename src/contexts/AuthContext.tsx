@@ -71,7 +71,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
     const signOut = async () => {
         const auth = getAuth();
-        signOutFirebase(auth);
+        await signOutFirebase(auth);
         setIsSignedIn(false);
     };
 
