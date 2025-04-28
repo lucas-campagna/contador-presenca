@@ -20,7 +20,6 @@ function Root() {
     }
 
     function handleMenuClick() {
-        console.log("sign out");
         signOut();
     }
 

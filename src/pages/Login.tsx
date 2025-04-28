@@ -3,17 +3,14 @@ import useAuth from "../hooks/useAuth.tsx";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/Input.tsx";
 import Button from "../components/Button.tsx";
-import { SignInProps } from "../contexts/AuthContext.tsx";
+import { SignInProps, SignUpProps } from "../contexts/AuthContext.tsx";
 import { NomeApp } from "../constants.tsx";
 // import { useParams } from 'react-router-dom';
 
 export default function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [pwdConfirm, setPwdConfirm] = useState("");
     const [isCreating, setIsCreating] = useState(false);
     const [error, setError] = useState("");
-    const { isSignedIn, signIn } = useAuth();
+    const { isSignedIn, signIn, signUp } = useAuth();
     const navigate = useNavigate();
     // TODO
     // const { token } = useParams();
@@ -43,7 +40,11 @@ export default function Login() {
             return;
         }
         try {
+          if(isCreating) {
+            await signUp({ email, password } as SignUpProps);
+          } else {
             await signIn({ email, password } as SignInProps);
+          }
         } catch (e) {
             setError((e as Error).message);
         }

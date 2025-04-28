@@ -6,6 +6,7 @@ import {
     signInWithEmailAndPassword,
     signOut as signOutFirebase,
 } from "firebase/auth";
+import { ColumnsIcon } from "@primer/octicons-react";
 
 export type SignUpProps = {
     email: string;
@@ -54,7 +55,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const signUp = async ({ email, password }: SignUpProps) => {
         const auth = getAuth();
         await createUserWithEmailAndPassword(auth, email, password);
-        signIn({ email, password });
+        await signIn({ email, password });
     };
 
     const signIn = async (props: SignInProps) => {
