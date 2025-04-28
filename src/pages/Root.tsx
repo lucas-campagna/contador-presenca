@@ -2,49 +2,35 @@ import { useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
 import { Outlet } from "react-router";
-import { ThreeBarsIcon } from '@primer/octicons-react'
-import useDialogList from "../hooks/useDialogList";
-
-
+import { ThreeBarsIcon } from "@primer/octicons-react";
 
 function Root() {
-    const { user } = useAuth();
+    const { isSignedIn } = useAuth();
     const navigate = useNavigate();
-    const { openDialogList } = useDialogList();
+    const { signOut } = useAuth();
 
     useEffect(() => {
-        console.log("User changed", user);
-        if (!user) {
-            console.log("User not found, redirecting to login");
+        if (!isSignedIn) {
             navigate("/login");
-        } else if (user.papel === "professor") {
-            navigate("/presencas");
         }
-    }, [user]);
+    }, [isSignedIn]);
 
-    if (!user) {
+    if (!isSignedIn) {
         return null;
     }
 
     function handleMenuClick() {
-        const nomeItem = `Nome: ${user?.nome}`;
-        const tipoContaItem = `Tipo de conta: ${user?.papel}`;
-        openDialogList({
-            title: "Sobre",
-            items: {
-                [nomeItem]: () => null,
-                [tipoContaItem]: () => null,
-            }
-        })
+        console.log("sign out");
+        signOut();
     }
 
     const Header = () => (
         <div className="flex flex-row items-center justify-between bg-primary w-full relative p-2 min-h-10">
-            <div className="flex flex-row items-center justify-start text-white p-2 absolute left-0" onClick={handleMenuClick}>
+            <div
+                className="flex flex-row items-center justify-start text-white p-2 absolute left-0"
+                onClick={handleMenuClick}
+            >
                 <ThreeBarsIcon size={24} />
-            </div>
-            <div className="flex flex-col items-center justify-center bg-primary w-full text-white">
-                <p className="text-sm capitalize">{user?.nome}</p>
             </div>
         </div>
     );
@@ -57,7 +43,6 @@ function Root() {
             </div>
         </div>
     );
-
 }
 
 export default Root;

@@ -1,71 +1,82 @@
-import React, { useState, useEffect } from 'react'
-import { getAuth, signInAnonymously } from 'firebase/auth'
-import useFirestore from '../hooks/useFirestore';
-import { User } from '../types';
+import React, { useState, useEffect } from "react";
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signOut as signOutFirebase,
+} from "firebase/auth";
 
-export interface AuthContextProps {
-    user: User | null
-    login: (token: string) => Promise<void>
-    logout: () => Promise<void>
-}
+export type SignUpProps = {
+    email: string;
+    password: string;
+};
+
+export type SignInProfessorProps = {
+    token: string;
+};
+
+export type SignInAdminProps = {
+    email: string;
+    password: string;
+};
+
+export type SignInProps = SignInProfessorProps | SignInAdminProps;
+
+export type AuthContextProps = {
+    isSignedIn: boolean;
+    signIn: (_: SignInProps) => Promise<void>;
+    signUp: (_: SignUpProps) => Promise<void>;
+    signOut: () => Promise<void>;
+};
 
 export const AuthContext = React.createContext<AuthContextProps>({
-    user: null,
-    login: async () => { },
-    logout: async () => { },
-})
+    isSignedIn: false,
+    signIn: async () => {},
+    signUp: async () => {},
+    signOut: async () => {},
+});
 
 export type AuthProviderProps = {
-    children: React.ReactNode
-}
+    children: React.ReactNode;
+};
 
 export default function AuthProvider({ children }: AuthProviderProps) {
-    const [user, setUser] = useState<User | null>(null);
-    const { get: getUser } = useFirestore('usuarios');
+    const [isSignedIn, setIsSignedIn] = useState(false);
 
     useEffect(() => {
-        async function fetchUser() {
-            const auth = getAuth();
-            await signInAnonymously(auth);
-            const cachedUserEncoded = localStorage.getItem('user');
-            if (cachedUserEncoded) {
-                const cachedUser = JSON.parse(atob(cachedUserEncoded as string));
-                const user = await getUser?.(cachedUser.token);
-                setUser({
-                    ...user,
-                    token: cachedUser.token,
-                });
-            }
-        }
-        fetchUser();
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            setIsSignedIn(!!user);
+        });
     }, []);
 
-    useEffect(() => {
-        if (user) {
-            localStorage.setItem('user', btoa(JSON.stringify({
-                token: user.token,
-                papel: user.papel,
-                nome: user.nome,
-            })));
-        }
-    }, [user]);
+    const signUp = async ({ email, password }: SignUpProps) => {
+        const auth = getAuth();
+        await createUserWithEmailAndPassword(auth, email, password);
+        signIn({ email, password });
+    };
 
-    const login = async (token: string) => {
-        const user = await getUser?.(token);
-        if (user) {
-            setUser({ ...user, token });
-        } else {
-            throw new Error('Token não registrado');
+    const signIn = async (props: SignInProps) => {
+        if ("token" in props) {
+            // TODO
+            throw false;
+        } else if ("email" in props && "password" in props) {
+            const { email, password } = props;
+            const auth = getAuth();
+            await signInWithEmailAndPassword(auth, email, password);
+            setIsSignedIn(true);
         }
     };
 
-    const logout = async () => {
-        setUser(null);
-        localStorage.removeItem('user');
+    const signOut = async () => {
+        const auth = getAuth();
+        signOutFirebase(auth);
+        setIsSignedIn(false);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ isSignedIn, signIn, signOut, signUp }}>
             {children}
         </AuthContext.Provider>
     );
