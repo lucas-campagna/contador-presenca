@@ -56,7 +56,7 @@ function useSheet() {
     },
     // TODO: internationalize "presencas"
     presencas: {
-      fetcher: (sheet: Sheet) => sheet.get("presença", { _deep: false }),
+      fetcher: (sheet: Sheet) => sheet.get("presenca", { _deep: false }),
       initialValue: [] as TPresenca[],
     },
     professores: {
@@ -97,33 +97,33 @@ function useSheet() {
       {
         check: (presenca: any) => !presenca?.id,
         call: (presencas: any[]) => {
-          sheet().set("presença", presencas);
+          sheet().set("presenca", presencas);
           refetchPresencas();
         },
       },
       {
         check: (presencaId: TPresenca["id"]) => !!presencaId,
         call: (presencasId: TPresenca["id"][]) => {
-          sheet().rm("presença", presencasId as string[]);
+          sheet().rm("presenca", presencasId as string[]);
           refetchPresencas();
         },
       },
     ]);
 
   async function syncPresenca(dia: Date, alunosId: TAluno["id"][]) {
-    const cloudPresenca = await sheet().get("presença");
+    const cloudPresenca = await sheet().get("presenca");
     const idOfPresencasToRemove = cloudPresenca
       .filter(({ aluno }) => !alunosId.includes(aluno))
       .map(({ id }) => id);
     if (idOfPresencasToRemove.length > 0) {
-      await sheet().rm("presença", idOfPresencasToRemove as string[]);
+      await sheet().rm("presenca", idOfPresencasToRemove as string[]);
     }
     const newPresencas = alunosId.map(
       (aluno) => ({ dia: dia.toISOString(), aluno } as any)
     );
     if (newPresencas.length > 0) {
       await sheet().set(
-        "presença",
+        "presenca",
         // TODO: "any" here is to fix the sheet.set API which is requiring "id" field
         newPresencas
       );

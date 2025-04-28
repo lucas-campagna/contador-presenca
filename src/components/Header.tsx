@@ -21,7 +21,7 @@ function Header(props: HeaderProps) {
   }
 
   return (
-    <div class="fixed mx-1 top-0 left-0 flex justify-center right-0 bg-sky-100 py-2 uppercase select-none">
+    <div class="fixed px-1 top-0 left-0 flex justify-center right-0 bg-sky-100 py-2 uppercase select-none rounded-b-lg shadow-md">
       <div class="flex gap-1 justify-start overflow-x-auto max-w-3xl rounded-xl">
         <For each={props.items()} fallback={null}>
           {(item, index) => (

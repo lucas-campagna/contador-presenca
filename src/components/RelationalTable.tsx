@@ -56,7 +56,7 @@ function RelationalTable(props: RelationalTableProps) {
     return (
       <div
         class={
-          "flex flex-col items-center justify-center " + props?.class?.cell
+          "flex flex-col items-center justify-stretch " + props?.class?.cell
         }
       >
         {result}

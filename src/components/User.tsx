@@ -3,7 +3,6 @@ import useSheet, { TAluno } from "../hooks/useSheet";
 import ActionButton from "./ActionButton";
 import useIsLoading from "../hooks/useIsloading";
 
-
 function User() {
   const { professores, presencas, syncPresenca, refetch } = useSheet();
   const setIsLoading = useIsLoading();
@@ -12,7 +11,7 @@ function User() {
     presencas()?.map((p) => p.aluno) ?? []
   );
   const dia = new Date();
-  const isSunday = dia.getDay() === 0;
+  const isSunday = true; //dia.getDay() === 0;
 
   setIsLoading(true);
 
