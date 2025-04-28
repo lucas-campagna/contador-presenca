@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import useAuth from '../hooks/useAuth.tsx'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 export default function Login() {
   const [nTries, setNTries] = useState(0);
@@ -14,7 +14,7 @@ export default function Login() {
     setToken('');
     setTimeout(async () => {
       console.log('Trying to login with token', token);
-      setNTries(n => n + 1);
+      setNTries(n => Math.min(n + 1, 3));
       try {
         await login(token);
         navigate('/');
@@ -30,6 +30,7 @@ export default function Login() {
   }
 
   useEffect(() => {
+    console.log('User changed', user);
     if (user) {
       console.log('User found, redirecting to home')
       navigate('/')
@@ -40,7 +41,7 @@ export default function Login() {
   }, [user, paramToken]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100 pt-20">
       <h1 className="text-3xl font-bold mt-8">Presente!</h1>
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
         <label className="block">
@@ -57,7 +58,7 @@ export default function Login() {
             focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
           />
         </label>
-        <div className="flex flex-col items-center justify-between">
+        <div className="flex flex-col items-center justify-between gap-2">
           <button
             type="submit"
             className="inline-flex items-center px-4 py-2 bg-sky-500 border border-transparent rounded-md font-semibold text-white uppercase tracking-widest hover:bg-sky-600 active:bg-sky-700 focus:outline-none focus:border-sky-700 focus:ring-sky-700 disabled:opacity-25 transition"
@@ -67,6 +68,14 @@ export default function Login() {
           <p className="text-sm text-red-500">{error}</p>
         </div>
       </form>
+      <div className="items-center p-4 text-gray-900 capitalize">
+        <Link
+          to="/abrir-escola"
+        >
+          Abrir Escola
+        </Link>
+      </div>
+
     </div>
   )
 }

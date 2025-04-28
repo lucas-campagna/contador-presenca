@@ -3,7 +3,7 @@ import useDialog from "../hooks/useDialog";
 import useProfessor from "../hooks/useProfessor";
 import { formatDate } from "../utils";
 
-function Professor() {
+function Presencas() {
     const today = useMemo(() => new Date().toLocaleString('pt-BR').split(',')[0], []);
     const { nome, classe } = useProfessor();
     const { setDialog, clearDialog } = useDialog();
@@ -98,4 +98,4 @@ function Professor() {
         </div>
     );
 }
-export default Professor;
+export default Presencas;

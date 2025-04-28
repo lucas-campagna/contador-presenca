@@ -1,5 +1,10 @@
-import Admin from './Admin';
-import Root from './Root';
-import Login from './Login';
-import Professor from './Professor';
-export { Admin, Root, Login, Professor };
+export { default as Admin } from './Admin';
+export { default as Root } from './Root';
+export { default as Login } from './Login';
+export { default as Presencas } from './Presencas';
+export { default as Home } from './Home';
+export { default as CriarTurma } from './CriarTurma';
+export { default as RegistrarAluno } from './RegistrarAluno';
+export { default as RegistrarProfessor } from './RegistrarProfessor';
+export { default as AdminPresencas } from './AdminPresencas';
+export { default as AbrirEscola } from './AbrirEscola';

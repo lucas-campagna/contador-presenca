@@ -52,7 +52,11 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
     const login = async (token: string) => {
         const user = await getUser?.(token);
-        setUser({ ...user, token });
+        if (user) {
+            setUser({ ...user, token });
+        } else {
+            throw new Error('Token não registrado');
+        }
     };
 
     const logout = async () => {
