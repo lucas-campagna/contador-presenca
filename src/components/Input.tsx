@@ -1,10 +1,13 @@
 import { useState } from "react";
 
 export type InputType = {
-    label: string,
-} & React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+  label: string;
+} & React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+>;
 
-function Input({label, ...props}: InputType) {
+function Input({ label, ...props }: InputType) {
   const [value, setValue] = useState("");
   return (
     <label className="block">

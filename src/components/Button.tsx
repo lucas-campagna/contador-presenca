@@ -1,7 +1,10 @@
 export type ButtonProps = {
   text: string;
   onClick?: (_: any) => void;
-} & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+} & React.DetailedHTMLProps<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+>;
 
 const Button = ({ text, ...props }: ButtonProps) => (
   <button

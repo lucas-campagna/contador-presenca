@@ -1,5 +1,1 @@
-
-
-export default function useValidateLogin() {
-
-}
+export default function useValidateLogin() {}

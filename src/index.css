@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-    --color-primary: #4a90e2;
+  --color-primary: #4a90e2;
 }
 
 * {
-    touch-action: none;
+  touch-action: none;
 }

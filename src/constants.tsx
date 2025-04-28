@@ -1,1 +1,1 @@
-export const NomeApp = 'Presente!';
+export const NomeApp = "Presente!";
