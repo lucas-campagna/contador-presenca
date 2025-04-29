@@ -1,14 +1,15 @@
+import { getApp } from "firebase/app";
 import {
+  addDoc,
+  collection,
+  doc,
+  DocumentData,
+  DocumentReference,
   getDoc,
   getDocs,
-  addDoc,
+  getFirestore,
   setDoc,
-  doc,
-  collection,
-  DocumentReference,
-  DocumentData,
 } from "firebase/firestore";
-import useFirebase from "./useFirebase";
 
 type FirestoreProp =
   | string
@@ -17,7 +18,7 @@ type FirestoreProp =
 export type SearchCollection<T = any> = {
   get: (docName: string) => Promise<T>;
   set: (docName: string, content: T) => Promise<void>;
-  add: (content: T) => Promise<void>;
+  add: (content: T) => Promise<DocumentReference<any, DocumentData>>;
   getAll: () => Promise<T[]>;
 };
 export type SearchDocument<T = any> = {
@@ -25,20 +26,21 @@ export type SearchDocument<T = any> = {
   set: (content: T) => Promise<void>;
 };
 
-export default function useFirestore<T = any>(prop: FirestoreProp) {
-  const { db } = useFirebase();
+const isPathToDocument = (path: string) => path.split("/").length % 2 === 0;
 
-  if (typeof prop === "string") {
-    const collectionName = prop;
+export default function firestore<T = any>(props: FirestoreProp) {
+  const db = getFirestore(getApp());
+  if (typeof props === "string") {
+    const collectionPath = props;
     const getAll = async () => {
-      const ref = collection(db, collectionName);
+      const ref = collection(db, collectionPath);
       const snap = await getDocs(ref);
       const data = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       return data;
     };
 
     const get = async (docName: string) => {
-      const ref = doc(db, collectionName, docName);
+      const ref = doc(db, collectionPath, docName);
       const snap = await getDoc(ref);
       if (!snap.exists()) {
         return null;
@@ -47,18 +49,23 @@ export default function useFirestore<T = any>(prop: FirestoreProp) {
     };
 
     const add = async (content: any) => {
-      const ref = collection(db, collectionName);
-      await addDoc(ref, content);
+        if (isPathToDocument(collectionPath)) {
+            const ref = doc(db, collectionPath);
+            return await setDoc(ref, content);
+        } else {
+            const ref = collection(db, collectionPath);
+            return await addDoc(ref, content);
+        }
     };
 
     const set = async (docName: string, content: any) => {
-      const ref = doc(db, collectionName, docName);
+      const ref = doc(db, collectionPath, docName);
       await setDoc(ref, content);
     };
 
     return { get, set, add, getAll } as T;
-  } else if (prop instanceof DocumentReference) {
-    const ref = prop;
+  } else if (props instanceof DocumentReference) {
+    const ref = props;
     const get = async () => {
       const snap = await getDoc(ref);
       return snap.exists() ? snap.data() : null;
@@ -66,6 +73,10 @@ export default function useFirestore<T = any>(prop: FirestoreProp) {
     const set = (content: any) => setDoc(ref, content);
     return { get, set } as T;
   }
-  console.log("Invalid prop type. Expected string or DocumentReference.");
+  console.log("Invalid props type. Expected string or DocumentReference.");
   return {} as T;
+}
+
+if (process.env.NODE_ENV === "development") {
+  (window as any).firestore = firestore;
 }

@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut as signOutFirebase,
 } from "firebase/auth";
-import { ColumnsIcon } from "@primer/octicons-react";
+import firestore from "../utils/firebase";
 
 export type SignUpProps = {
   email: string;
@@ -25,17 +25,21 @@ export type SignInAdminProps = {
 export type SignInProps = SignInProfessorProps | SignInAdminProps;
 
 export type AuthContextProps = {
+  hasCheckedSignedIn: boolean;
   isSignedIn: boolean;
   signIn: (_: SignInProps) => Promise<void>;
   signUp: (_: SignUpProps) => Promise<void>;
   signOut: () => Promise<void>;
+  validateAccount: () => Promise<void>;
 };
 
 export const AuthContext = React.createContext<AuthContextProps>({
+  hasCheckedSignedIn: false,
   isSignedIn: false,
   signIn: async () => {},
   signUp: async () => {},
   signOut: async () => {},
+  validateAccount: async () => {},
 });
 
 export type AuthProviderProps = {
@@ -43,22 +47,26 @@ export type AuthProviderProps = {
 };
 
 export default function AuthProvider({ children }: AuthProviderProps) {
+  const [hasCheckedSignedIn, setHasCheckedSignedIn] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
+      setHasCheckedSignedIn(true);
       setIsSignedIn(!!user);
     });
   }, []);
 
-  const signUp = async ({ email, password }: SignUpProps) => {
+  async function signUp({ email, password }: SignUpProps) {
     const auth = getAuth();
     await createUserWithEmailAndPassword(auth, email, password);
     await signIn({ email, password });
-  };
+    // TUDO: should be called only after e-mail validation
+    await validateAccount();
+  }
 
-  const signIn = async (props: SignInProps) => {
+  async function signIn(props: SignInProps) {
     if ("token" in props) {
       // TODO
       throw false;
@@ -68,16 +76,35 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       await signInWithEmailAndPassword(auth, email, password);
       setIsSignedIn(true);
     }
-  };
+  }
 
-  const signOut = async () => {
+  async function signOut() {
     const auth = getAuth();
     await signOutFirebase(auth);
     setIsSignedIn(false);
-  };
+  }
+
+  async function validateAccount() {
+    // Cria nova escola
+    const { add } = firestore("escolas");
+    const newDocRef = await add({
+      nome: "Nome Escola",
+    });
+    const {} = firestore(`${newDocRef.path}/professores`);
+    const {} = firestore(`${newDocRef.path}/classes`);
+  }
 
   return (
-    <AuthContext.Provider value={{ isSignedIn, signIn, signOut, signUp }}>
+    <AuthContext.Provider
+      value={{
+        hasCheckedSignedIn,
+        isSignedIn,
+        signIn,
+        signOut,
+        signUp,
+        validateAccount,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

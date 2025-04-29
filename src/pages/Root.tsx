@@ -1,45 +1,31 @@
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
 import { Outlet } from "react-router";
-import { ThreeBarsIcon } from "@primer/octicons-react";
 
 function Root() {
-  const { isSignedIn } = useAuth();
+  const { hasCheckedSignedIn, isSignedIn } = useAuth();
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
-    if (!isSignedIn) {
+    const isInLoginPage = location.pathname === "/login";
+    if (!isSignedIn && !isInLoginPage) {
       navigate("/login");
+    } else if (isSignedIn && isInLoginPage) {
+      navigate("/");
     }
-  }, [isSignedIn]);
+  }, [isSignedIn, location]);
 
-  if (!isSignedIn) {
-    return null;
-  }
-
-  function handleMenuClick() {
-    signOut();
-  }
-
-  const Header = () => (
-    <div className="flex flex-row items-center justify-between bg-primary w-full relative p-2 min-h-10">
-      <div
-        className="flex flex-row items-center justify-start text-white p-2 absolute left-0"
-        onClick={handleMenuClick}
-      >
-        <ThreeBarsIcon size={24} />
-      </div>
+  const Loading = () => (
+    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-white font-bold p-3 rounded-full animate-bounce">
+      Carregando...
     </div>
   );
 
   return (
     <div className="flex flex-col items-strech justify-start h-screen w-screen bg-gray-100 overflow-y-hidden">
-      <Header />
-      <div className="flex flex-col items-stretch justify-start overflow-y-auto overflow-x-hidden w-full h-full">
-        <Outlet />
-      </div>
+      {hasCheckedSignedIn ? <Outlet /> : <Loading />}
     </div>
   );
 }

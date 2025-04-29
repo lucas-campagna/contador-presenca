@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAuth from "../hooks/useAuth.tsx";
-import { useNavigate } from "react-router-dom";
 import Input from "../components/Input.tsx";
 import Button from "../components/Button.tsx";
 import { SignInProps, SignUpProps } from "../contexts/AuthContext.tsx";
@@ -10,16 +9,9 @@ import { NomeApp } from "../constants.tsx";
 export default function Login() {
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState("");
-  const { isSignedIn, signIn, signUp } = useAuth();
-  const navigate = useNavigate();
+  const { signIn, signUp } = useAuth();
   // TODO
   // const { token } = useParams();
-
-  useEffect(() => {
-    if (isSignedIn) {
-      navigate("/");
-    }
-  }, [isSignedIn]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,7 +43,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100 pt-20">
+    <div className="flex flex-col items-center justify-start w-full min-h-screen pt-20">
       <h1 className="text-3xl font-bold mt-8">{NomeApp}</h1>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col items-center justify-start my-8 min-h-[230px] gap-4">
