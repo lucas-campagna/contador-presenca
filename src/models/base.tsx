@@ -8,18 +8,18 @@ type IdOrRefType = string | DocumentReference;
 export class Base {
   id?: string = undefined;
   ref?: DocumentReference;
-  nome = "";
 
   protected static _pathSaved?: string;
   protected static _folder?: string;
 
   static get _path() {
+    if (this._pathSaved) {
+      return this._pathSaved;
+    }
     if (!this._folder) {
       throw "Folder not defined";
     }
-    if (!this._pathSaved) {
-      this._pathSaved = `${getEscolaRef().path}${this._folder}`;
-    }
+    this._pathSaved = `${getEscolaRef().path}${this._folder}`;
     return this._pathSaved;
   }
 
@@ -129,10 +129,6 @@ export class Base {
   async rm<T extends typeof Base>() {
     const self = this.constructor as T;
     this.#ref() && (await self._doc(this.#ref()).rm());
-  }
-
-  async rename(nome: string) {
-    await this.update({ nome } as Partial<Base>);
   }
 }
 
