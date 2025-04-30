@@ -5,6 +5,11 @@ class Aluno extends Base {
 
   protected static _folder = "/alunos";
 
+  constructor(other: Aluno) {
+    super(other);
+    this._assign<Aluno>(other);
+  }
+
   async rename(nome: string) {
     // TODO: tem como remover o "<Aluno>"?
     await this.update<Aluno>({ nome });
