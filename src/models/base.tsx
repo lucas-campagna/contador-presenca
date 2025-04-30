@@ -120,7 +120,7 @@ export class Base {
     Object.assign(this, other);
   }
 
-  async update<T extends Base>(other: Partial<T>) {
+  async update<T extends Base>(this: T, other: Partial<T>) {
     Object.assign(this, other);
     await this.push();
   }
