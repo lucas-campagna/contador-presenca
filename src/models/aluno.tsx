@@ -6,7 +6,8 @@ class Aluno extends Base {
   protected static _folder = "/alunos";
   
   async rename(nome: string) {
-    await this.update({ nome } as Aluno);
+    // TODO: tem como remover o "as Partial<Aluno>"?
+    await this.update({ nome } as Partial<Aluno>);
   }
 }
 

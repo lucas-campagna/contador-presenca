@@ -1,5 +1,4 @@
 import { getRef as getEscolaRef } from "./escola";
-import { Partial } from "../types";
 import { DocumentReference } from "firebase/firestore";
 import firestore, { CollectionRequest, DocumentRequest } from "./firestore";
 
@@ -121,7 +120,7 @@ export class Base {
     Object.assign(this, other);
   }
 
-  async update(other: Partial<Base>) {
+  async update<T extends Base>(other: Partial<T>) {
     Object.assign(this, other);
     await this.push();
   }
