@@ -1,15 +1,20 @@
 import { DocumentReference } from "firebase/firestore";
 import Aluno from "./aluno";
 import Base from "./base";
+import { formatDate } from "../utils";
 
 type AlunoRef = DocumentReference;
 type ClasseRemote = Classe & {
   alunos: AlunoRef[];
-}
+};
+type Presencas = {
+  [key: string]: Aluno[];
+};
 
 class Classe extends Base {
   nome = "";
   alunos: Aluno[] = [];
+  presencas: Presencas = {};
 
   protected static _folder = "/classes";
 
@@ -34,6 +39,25 @@ class Classe extends Base {
     );
   }
 
+  togglePresenca(aluno: Aluno, day: Date = new Date()) {
+    const date = formatDate(day);
+    if (this.alunos.map((a) => a.id).includes(aluno.id)) {
+      this.presencas[date] = this.presencas[date] ?? [];
+      if (this.presencas[date].map((a) => a.id).includes(aluno.id)) {
+        this.presencas[date] = this.presencas[date].filter((a) => a.id !== aluno.id);
+        if(this.presencas[date].length === 0){
+          delete this.presencas[date];
+        }
+      } else {
+        this.presencas[date].push(aluno);
+      }
+    } else {
+      throw new Error(
+        "Trying to add attendance of student not listed to this class"
+      );
+    }
+  }
+
   async _toRemote(): Promise<this> {
     return {
       ...(await super._toRemote()),
@@ -46,10 +70,14 @@ class Classe extends Base {
   }
 
   async _fromRemote(other: object): Promise<typeof this> {
-    const classeRemote = (await super._fromRemote(other)) as any as ClasseRemote;
+    const classeRemote = (await super._fromRemote(
+      other
+    )) as any as ClasseRemote;
     return {
       ...classeRemote,
-      alunos: await Promise.all((classeRemote.alunos as AlunoRef[]).map(ref => Aluno.get(ref)))
+      alunos: await Promise.all(
+        (classeRemote.alunos as AlunoRef[]).map((ref) => Aluno.get(ref))
+      ),
     } as typeof this;
   }
 }
