@@ -45,8 +45,8 @@ class Base {
     }
   }
 
-  static list<T extends typeof Base>(this: T) {
-    return this._coll().get() as Promise<T[]>;
+  static list<T extends typeof Base, U extends T>(this: T) {
+    return this._coll().get() as Promise<U[]>;
   }
 
   static async create<T extends typeof Base, U extends Base>(
