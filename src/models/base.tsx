@@ -100,14 +100,10 @@ class Base {
     throw new Error("Id or Ref not found");
   }
 
-  static async build<T extends typeof Base, U extends Base>(this: T, other: U | DocumentReference): Promise<void | U>{
-    if (other instanceof DocumentReference) {
-      return this.get(other);
-    } else {
-      const r = new this();
-      r._assign(other as any);
-      return r as U;
-    }
+  static async build<T extends typeof Base, U extends Base>(this: T, other: U): Promise<void | U>{
+    const r = new this();
+    r._assign(other as any);
+    return r as U;
   }
 
   async _toRemote<T extends Base>(this: T): Promise<this> {
