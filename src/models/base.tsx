@@ -4,7 +4,7 @@ import firestore, { CollectionRequest, DocumentRequest } from "./firestore";
 
 type IdOrRefType = string | DocumentReference;
 
-export class Base {
+class Base {
   ref?: DocumentReference;
   get id() {
     return this.ref?.id;
@@ -53,8 +53,8 @@ export class Base {
     this: T,
     content: U
   ) {
-    const other = new this(content);
-    await other.push();
+    const other = await this.build(content);
+    await other?.push();
     return other;
   }
 
@@ -80,52 +80,61 @@ export class Base {
     this.rm(Object.keys(await this.list()));
   }
 
-  static async get<U extends Base>(idOrRef: IdOrRefType) {
+  static async get<T extends typeof Base, U extends Base>(this: T, idOrRef: IdOrRefType): Promise<U | void> {
     if (idOrRef instanceof DocumentReference) {
       const ref = idOrRef;
-      const base = await this._doc<U>(ref).get();
-      if (base) {
-        base.ref = ref;
-        return base;
+      const obj = await this._doc<U>(ref).get();
+      if (obj) {
+        obj.ref = ref;
+        return this.build(obj);
       }
     } else {
       const id = idOrRef;
       const req = this._doc<U>(id);
-      const base = await req.get();
-      if (base) {
-        base.ref = req.ref;
-        return base;
+      const obj = await req.get();
+      if (obj) {
+        obj.ref = req.ref;
+        return this.build(obj);
       }
+    }
+    throw new Error("Id or Ref not found");
+  }
+
+  static async build<T extends typeof Base, U extends Base>(this: T, other: U | DocumentReference): Promise<void | U>{
+    if (other instanceof DocumentReference) {
+      return this.get(other);
+    } else {
+      const r = new this();
+      r._assign(other as any);
+      return r as U;
     }
   }
 
-  #toRemote() {
-    // Returns 'this' with local fields dropped
-    return Object.assign({ ...this }, { ref: null });
+  async _toRemote<T extends Base>(this: T): Promise<this> {
+    return { ...this, ref: null };
+  }
+  async _fromRemote(other: object): Promise<typeof this> {
+    return other as typeof this;
   }
 
-  _assign<T extends Base>(this: T, other: Partial<T>) {
+  _assign<T extends Base>(this: T, other: Partial<T>): void {
     if (other.id && !other.ref) {
       other.ref = this._doc().ref;
     }
     Object.assign(this, other);
   }
 
-  constructor(other: Base) {
-    this._assign(other as any);
-  }
-
   _doc<T extends Base, U extends typeof Base>(this: T) {
     const self = this.constructor as U;
-    return self._doc<DocumentRequest<T>>(this.ref);
+    return self._doc<T>(this.ref);
   }
 
   async push<U extends typeof Base>() {
     if (this.ref) {
-      await this._doc().set(this.#toRemote());
+      await this._doc().set(await this._toRemote());
     } else {
       const self = this.constructor as U;
-      this.ref = await self._coll().add(this.#toRemote());
+      this.ref = await self._coll().add(await this._toRemote());
     }
   }
 
@@ -133,12 +142,12 @@ export class Base {
     const self = this.constructor as T;
     const other = await self._doc<this>(this.ref).get();
     if (other) {
-      this._assign(other);
+      this._assign(await this._fromRemote(other));
     }
   }
 
   async update<T extends Base>(this: T, other: Partial<T>) {
-    this._assign(other);
+    this._assign(await this._fromRemote(other));
     await this.push();
   }
 
