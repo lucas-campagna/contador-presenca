@@ -17,7 +17,7 @@ function Home() {
       />
       <Button
         text="Registrar Aluno"
-        onClick={() => navigate("/admin/registrar-aluno")}
+        onClick={() => navigate("/admin/alunos")}
       />
       <Button
         text="Registrar Professor"

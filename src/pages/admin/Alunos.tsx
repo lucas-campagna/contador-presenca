@@ -1,4 +1,4 @@
-function RegistrarAluno() {
+function Alunos() {
   return (
     <div>
       <h1>Registrar Aluno</h1>
@@ -6,4 +6,4 @@ function RegistrarAluno() {
     </div>
   );
 }
-export default RegistrarAluno;
+export default Alunos;

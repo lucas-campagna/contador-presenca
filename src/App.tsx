@@ -29,8 +29,8 @@ function App() {
                     <Route path="presencas" element={<P.AdminPresencas />} />
                     <Route path="criar-turma" element={<P.CriarTurma />} />
                     <Route
-                      path="registrar-aluno"
-                      element={<P.RegistrarAluno />}
+                      path="alunos"
+                      element={<P.Alunos />}
                     />
                     <Route
                       path="registrar-professor"

@@ -1,13 +1,8 @@
-import useAdmin from "../hooks/useAdmin";
+import { Outlet } from "react-router";
 
 function Admin() {
-  useAdmin();
-  return (
-    <div>
-      <h1>Admin</h1>
-      <p>Admin page content goes here.</p>
-    </div>
-  );
+  // TODO: validar se eh admin
+  return <Outlet />;
 }
 
 export default Admin;
