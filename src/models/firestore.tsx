@@ -16,6 +16,7 @@ import {
 type Reference = string | CollectionReference | DocumentReference;
 export type CollectionRequest<T = any> = {
   ref: CollectionReference;
+  docsRef: () => Promise<DocumentReference[]>;
   get: (docName?: string) => Promise<T | void>;
   set: (docName: string, content: T) => Promise<T>;
   add: (content: T) => Promise<DocumentReference>;
@@ -63,8 +64,9 @@ export default function firestore<T>(ref: Reference): T {
       await setDoc(refDoc, parseObject(content));
       return refDoc;
     };
+    const docsRef = async () => (await getDocs(ref as CollectionReference)).docs.map(d => d.ref);
 
-    return { ref, get, set, add } as T;
+    return { ref, docsRef, get, set, add } as T;
   } else if (ref instanceof DocumentReference) {
     const get = async () => {
       const snap = await getDoc(ref);

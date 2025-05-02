@@ -45,8 +45,8 @@ class Base {
     }
   }
 
-  static list<T extends typeof Base, U extends T>(this: T) {
-    return this._coll().get() as Promise<U[]>;
+  static async list<T extends typeof Base>(this: T) {
+    return Promise.all((await this._coll().docsRef()).map(d => this.get(d)));
   }
 
   static async create<T extends typeof Base, U extends Base>(
@@ -80,7 +80,10 @@ class Base {
     this.rm(Object.keys(await this.list()));
   }
 
-  static async get<T extends typeof Base, U extends Base>(this: T, idOrRef: IdOrRefType): Promise<U | void> {
+  static async get<T extends typeof Base, U extends Base>(
+    this: T,
+    idOrRef: IdOrRefType
+  ): Promise<U | void> {
     if (idOrRef instanceof DocumentReference) {
       const ref = idOrRef;
       const obj = await this._doc<U>(ref).get();
@@ -100,7 +103,10 @@ class Base {
     throw new Error("Id or Ref not found");
   }
 
-  static async build<T extends typeof Base, U extends Base>(this: T, other: U): Promise<void | U>{
+  static async build<T extends typeof Base, U extends Base>(
+    this: T,
+    other: U
+  ): Promise<void | U> {
     const r = new this();
     r._assign(other as any);
     return r as U;
