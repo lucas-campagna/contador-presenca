@@ -1,7 +1,6 @@
 import { getAuth } from "firebase/auth";
 import { DocumentReference } from "firebase/firestore";
 import firestore, { DocumentRequest } from "./firestore";
-
 import Base from "./base";
 
 class Escola extends Base {
