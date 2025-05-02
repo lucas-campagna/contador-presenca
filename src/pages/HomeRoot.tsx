@@ -16,7 +16,7 @@ function HomeRoot() {
   return (
     <>
       <Header onMenuClick={handleMenuClick}/>
-      <div className="flex flex-col items-stretch justify-start overflow-y-auto overflow-x-hidden w-full h-full">
+      <div className="flex flex-col items-stretch justify-start overflow-y-auto overflow-x-hidden w-full h-full p-2">
         <Outlet />
       </div>
     </>
