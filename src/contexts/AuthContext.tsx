@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut as signOutFirebase,
 } from "firebase/auth";
-import firestore from "../utils/firebase";
+import firestore from "../models/firestore";
 
 export type SignUpProps = {
   email: string;
@@ -30,7 +30,7 @@ export type AuthContextProps = {
   signIn: (_: SignInProps) => Promise<void>;
   signUp: (_: SignUpProps) => Promise<void>;
   signOut: () => Promise<void>;
-  validateAccount: () => Promise<void>;
+  // validateAccount: () => Promise<void>;
 };
 
 export const AuthContext = React.createContext<AuthContextProps>({
@@ -39,7 +39,7 @@ export const AuthContext = React.createContext<AuthContextProps>({
   signIn: async () => {},
   signUp: async () => {},
   signOut: async () => {},
-  validateAccount: async () => {},
+  // validateAccount: async () => {},
 });
 
 export type AuthProviderProps = {
@@ -63,7 +63,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     await createUserWithEmailAndPassword(auth, email, password);
     await signIn({ email, password });
     // TUDO: should be called only after e-mail validation
-    await validateAccount();
+    // await validateAccount();
   }
 
   async function signIn(props: SignInProps) {
@@ -84,15 +84,20 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     setIsSignedIn(false);
   }
 
-  async function validateAccount() {
-    // Cria nova escola
-    const { add } = firestore("escolas");
-    const newDocRef = await add({
-      nome: "Nome Escola",
-    });
-    const {} = firestore(`${newDocRef.path}/professores`);
-    const {} = firestore(`${newDocRef.path}/classes`);
-  }
+  // async function validateAccount() {
+  //   // Cria nova escola
+  //   const auth = getAuth();
+  //   if (!auth.currentUser) {
+  //     throw "Erro ao validar conta: login nao efetuado"
+  //   }
+  //   const uid = auth.currentUser.uid;
+  //   const { add } = firestore(`escolas/${uid}`);
+  //   const newDocRef = await add({
+  //     nome: "Nome Escola",
+  //   });
+  //   const {} = firestore(`${newDocRef.path}/professores`);
+  //   const {} = firestore(`${newDocRef.path}/classes`);
+  // }
 
   return (
     <AuthContext.Provider
@@ -102,7 +107,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         signIn,
         signOut,
         signUp,
-        validateAccount,
+        // validateAccount,
       }}
     >
       {children}

@@ -1,48 +1,50 @@
 import { BrowserRouter, Routes, Route } from "react-router";
-import AuthProvider from "./contexts/AuthContext";
+import * as C from "./contexts";
 import * as P from "./pages";
-import DialogProvider from "./contexts/DialogContext";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCswKxqW-evd_LJ7RTlFvbH1FUPpp-iXaE",
-  authDomain: "ibconforto-ebd.firebaseapp.com",
-  projectId: "ibconforto-ebd",
-  storageBucket: "ibconforto-ebd.firebasestorage.app",
-  messagingSenderId: "114467328800",
-  appId: "1:114467328800:web:5e80eba5cd30266d8b7d45",
+  apiKey: "AIzaSyDyo2mXWNKsxEeFSZeQG9WVCnXCaFfelmc",
+  authDomain: "presente-3ad7a.firebaseapp.com",
+  projectId: "presente-3ad7a",
+  storageBucket: "presente-3ad7a.firebasestorage.app",
+  messagingSenderId: "771287059740",
+  appId: "1:771287059740:web:0d34ad7543cd74619d7ed9",
+  measurementId: "G-DYN62Q8XLF",
 };
 initializeApp(firebaseConfig);
 
 function App() {
   return (
-    <DialogProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<P.Root />}>
-              <Route path="/" element={<P.HomeRoot />}>
-                <Route index element={<P.Home />} />
-                <Route path="presencas" element={<P.Presencas />} />
-                <Route path="admin" element={<P.Admin />}>
-                  <Route path="presencas" element={<P.AdminPresencas />} />
-                  <Route path="criar-turma" element={<P.CriarTurma />} />
-                  <Route
-                    path="registrar-aluno"
-                    element={<P.RegistrarAluno />}
-                  />
-                  <Route
-                    path="registrar-professor"
-                    element={<P.RegistrarProfessor />}
-                  />
+    <C.LoadingProvider>
+      <C.DialogProvider>
+        <C.AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<P.Root />}>
+                <Route path="/" element={<P.HomeRoot />}>
+                  <Route index element={<P.Home />} />
+                  <Route path="presencas" element={<P.Presencas />} />
+                  <Route path="admin" element={<P.Admin />}>
+                    <Route path="presencas" element={<P.AdminPresencas />} />
+                    <Route path="criar-turma" element={<P.CriarTurma />} />
+                    <Route
+                      path="registrar-aluno"
+                      element={<P.RegistrarAluno />}
+                    />
+                    <Route
+                      path="registrar-professor"
+                      element={<P.RegistrarProfessor />}
+                    />
+                  </Route>
                 </Route>
+                <Route path="/login" element={<P.Login />} />
               </Route>
-              <Route path="/login" element={<P.Login />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </DialogProvider>
+            </Routes>
+          </BrowserRouter>
+        </C.AuthProvider>
+      </C.DialogProvider>
+    </C.LoadingProvider>
   );
 }
 
