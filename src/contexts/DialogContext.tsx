@@ -9,12 +9,12 @@ import {
 
 type DialogContextProps = {
   setDialog: Dispatch<SetStateAction<ReactNode>>;
-  clearDialog: () => void;
+  closeDialog: () => void;
 };
 
 export const DialogContext = createContext<DialogContextProps>({
   setDialog: () => null,
-  clearDialog: () => null,
+  closeDialog: () => null,
 });
 
 type DialogProviderProps = {
@@ -24,13 +24,13 @@ type DialogProviderProps = {
 export default function DialogProvider({ children }: DialogProviderProps) {
   const [content, setDialog] = useState<ReactNode | null>(null);
   const dialogBlur = useRef(null);
-  const clearDialog = () => {
+  const closeDialog = () => {
     setDialog(null);
   };
 
   function handleBlur(e: any) {
     if (e.target === dialogBlur.current) {
-      clearDialog();
+      closeDialog();
     }
   }
 
@@ -47,7 +47,7 @@ export default function DialogProvider({ children }: DialogProviderProps) {
           </div>
         </div>
       ) : null}
-      <DialogContext.Provider value={{ setDialog, clearDialog }}>
+      <DialogContext.Provider value={{ setDialog, closeDialog }}>
         {children}
       </DialogContext.Provider>
     </>

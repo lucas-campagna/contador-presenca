@@ -10,11 +10,11 @@ export type DialogListProps = {
 };
 
 function DialogList({ title, items }: DialogListProps) {
-  const { setDialog, clearDialog } = useDialog();
+  const { setDialog, closeDialog } = useDialog();
   function handleOnClick(name: string, action: TItems | CallableFunction) {
     if (typeof action === "function") {
       (action as CallableFunction)();
-      clearDialog();
+      closeDialog();
     } else {
       setDialog(<DialogList title={name} items={action as TItems} />);
     }
@@ -40,7 +40,7 @@ function DialogList({ title, items }: DialogListProps) {
 }
 
 const useDialogList = () => {
-  const { setDialog, clearDialog } = useDialog();
+  const { setDialog, closeDialog } = useDialog();
 
   function openDialogList({ title, items }: DialogListProps) {
     setDialog(<DialogList title={title} items={items} />);
@@ -48,7 +48,7 @@ const useDialogList = () => {
 
   return {
     openDialogList,
-    clearDialog,
+    closeDialog,
   };
 };
 

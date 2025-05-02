@@ -6,7 +6,7 @@ import Button from "../components/Button";
 
 function HomeRoot() {
   const { isSignedIn, signOut } = useAuth();
-  const { setDialog, clearDialog } = useDialog();
+  const { setDialog, closeDialog } = useDialog();
 
   if (!isSignedIn) {
     return null;
@@ -21,14 +21,13 @@ function HomeRoot() {
             text={"Sim"}
             onClick={() => {
               signOut();
-              clearDialog();
+              closeDialog();
             }}
           />
-          <Button text={"Não"} onClick={() => clearDialog()} />
+          <Button text={"Não"} onClick={() => closeDialog()} />
         </div>
       </div>
     );
-    // signOut();
   }
 
   return (

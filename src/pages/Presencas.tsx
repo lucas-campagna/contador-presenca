@@ -9,7 +9,7 @@ function Presencas() {
     []
   );
   const { nome, classe } = useProfessor();
-  const { setDialog, clearDialog } = useDialog();
+  const { setDialog, closeDialog } = useDialog();
 
   useEffect(() => {
     if (!classe) {
@@ -19,7 +19,7 @@ function Presencas() {
         </div>
       );
     } else {
-      clearDialog();
+      closeDialog();
     }
   }, [classe]);
 
@@ -30,7 +30,7 @@ function Presencas() {
       function handleAdd() {
         if ((ref.current as any)?.value) {
           classe?.addAluno?.((ref.current as any).value);
-          clearDialog();
+          closeDialog();
         }
       }
       return (
