@@ -7,17 +7,17 @@ type FormFields = {
   type: any; //AllowedFieldTypes;
   [key: string]: any;
 }; //& Parameters<AllowedFieldTypes>;
-type FormProps = {
+export type FormProps = {
   title?: string;
   fields: FormFields[];
-  onSubmit: (_:{ [key: string]: any }) => void;
+  onSubmit?: (_:{ [key: string]: any }) => void;
   submitText?: string;
 };
 
 function FormList({ title, fields, onSubmit, submitText }: FormProps) {
   async function handleSubmit(e: any) {
     e.preventDefault();
-    onSubmit(
+    onSubmit?.(
       fields.reduce(
         (acc, { name }) => ({ ...acc, [name]: e.target.elements[name].value }),
         {}
@@ -30,10 +30,10 @@ function FormList({ title, fields, onSubmit, submitText }: FormProps) {
       {title && <div className="font-bold mb-2">{title}</div>}
       <>
         {fields.map(({ name, type: Type, ...props }, i) => (
-          <Type name={name} {...props} key={i}/>
+          <Type name={name} disabled={!onSubmit} {...props} key={i}/>
         ))}
       </>
-      <Button text={submitText ?? "Ok"} type="submit" />
+      {onSubmit && <Button text={submitText ?? "Ok"} type="submit" />}
     </form>
   );
 }
