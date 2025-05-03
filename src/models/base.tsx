@@ -91,7 +91,7 @@ class Base {
         obj.ref = ref;
         return this.build(obj);
       }
-    } else {
+    } else if(typeof idOrRef === 'string') {
       const id = idOrRef;
       const req = this._doc<U>(id);
       const obj = await req.get();
