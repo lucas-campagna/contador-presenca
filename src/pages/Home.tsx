@@ -16,7 +16,7 @@ function Home() {
         onClick={() => navigate("/admin/criar-turma")}
       />
       <Button
-        text="Registrar Aluno"
+        text="Alunos"
         onClick={() => navigate("/admin/alunos")}
       />
       <Button
