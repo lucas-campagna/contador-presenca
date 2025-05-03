@@ -10,7 +10,7 @@ type FormFields = {
 export type FormProps = {
   title?: string;
   fields: FormFields[];
-  onSubmit?: (_:{ [key: string]: any }) => void;
+  onSubmit?: (_: { [key: string]: any }) => void;
   submitText?: string;
 };
 
@@ -24,13 +24,13 @@ function FormList({ title, fields, onSubmit, submitText }: FormProps) {
       )
     );
   }
-
+  
   return (
     <form onSubmit={handleSubmit} className="flex flex-col items-stretch gap-2">
       {title && <div className="font-bold mb-2">{title}</div>}
       <>
         {fields.map(({ name, type: Type, ...props }, i) => (
-          <Type name={name} disabled={!onSubmit} {...props} key={i}/>
+          <Type name={name} disabled={!onSubmit} {...props} key={i} />
         ))}
       </>
       {onSubmit && <Button text={submitText ?? "Ok"} type="submit" />}

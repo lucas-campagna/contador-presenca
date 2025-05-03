@@ -17,3 +17,5 @@ export function buildURLParams(obj: any): string {
   }
   return params.toString();
 }
+
+export const capitalize = (s: string) => String(s).charAt(0).toUpperCase() + String(s).slice(1).toLocaleLowerCase();
