@@ -16,9 +16,9 @@ initializeApp(firebaseConfig);
 
 function App() {
   return (
-    <C.LoadingProvider>
-      <C.DialogProvider>
-        <C.AuthProvider>
+    <C.DialogProvider>
+      <C.AuthProvider>
+        <C.LoadingProvider>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<P.Root />}>
@@ -42,9 +42,9 @@ function App() {
               </Route>
             </Routes>
           </BrowserRouter>
-        </C.AuthProvider>
-      </C.DialogProvider>
-    </C.LoadingProvider>
+        </C.LoadingProvider>
+      </C.AuthProvider>
+    </C.DialogProvider>
   );
 }
 
