@@ -29,8 +29,8 @@ function FormList({ title, fields, onSubmit, submitText }: FormProps) {
     <form onSubmit={handleSubmit} className="flex flex-col items-stretch gap-2">
       {title && <div className="font-bold mb-2">{title}</div>}
       <>
-        {fields.map(({ name, type: Type, ...props }) => (
-          <Type name={name} {...props} />
+        {fields.map(({ name, type: Type, ...props }, i) => (
+          <Type name={name} {...props} key={i}/>
         ))}
       </>
       <Button text={submitText ?? "Ok"} type="submit" />
