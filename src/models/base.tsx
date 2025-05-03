@@ -159,4 +159,8 @@ class Base {
   }
 }
 
+if (process.env.NODE_ENV === "development") {
+  (window as any).Base = Base;
+}
+
 export default Base;
