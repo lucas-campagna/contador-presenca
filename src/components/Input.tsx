@@ -7,13 +7,12 @@ export type InputType = {
   HTMLInputElement
 >;
 
-function Input({ label, ...props }: InputType) {
-  const [value, setValue] = useState("");
+function Input({ label, value: initialValue, ...props }: InputType) {
+  const [value, setValue] = useState(initialValue);
   return (
-    <label className="block">
-      <span className="text-gray-700">{label}</span>
+    <div>
+      {label && <span className="text-gray-700">{label}</span>}
       <input
-        name={label}
         {...props}
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -24,7 +23,7 @@ function Input({ label, ...props }: InputType) {
         // TODO: Proriedade interessante. Estudar melhor uso
         // invalid:border-pink-500 invalid:text-pink-600
       />
-    </label>
+    </div>
   );
 }
 export default Input;

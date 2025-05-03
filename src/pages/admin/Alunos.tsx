@@ -55,7 +55,7 @@ function Alunos() {
         title={"Adicionar Aluno"}
         fields={[
           { name: "nome", type: Input, label: "Nome" },
-          { name: "sexo", type: Select, options: ["", "Masculino", "Feminino"] },
+          { name: "sexo", type: Select, label: "Sexo", options: ["", "Masculino", "Feminino"] },
         ]}
         submitText="Salvar"
         onSubmit={handleSubmit}
