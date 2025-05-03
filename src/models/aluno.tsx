@@ -2,6 +2,7 @@ import Base from "./base";
 
 class Aluno extends Base {
   nome = "";
+  sexo? = "";
 
   protected static _folder = "/alunos";
 
