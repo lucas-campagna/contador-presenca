@@ -10,7 +10,7 @@ type FormFields = {
 type FormProps = {
   title?: string;
   fields: FormFields[];
-  onSubmit: CallableFunction;
+  onSubmit: (_:{ [key: string]: any }) => void;
   submitText?: string;
 };
 
