@@ -8,7 +8,7 @@ export type InputType = {
 >;
 
 function Input({ label, value: initialValue, ...props }: InputType) {
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(initialValue ?? '');
   return (
     <div>
       {label && <span className="text-gray-700">{label}</span>}
