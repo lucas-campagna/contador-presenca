@@ -11,10 +11,12 @@ export type FormProps = {
   title?: string;
   fields: FormFields[];
   onSubmit?: (_: { [key: string]: any }) => void;
+  onCancel?: () => void;
   submitText?: string;
+  cancelText?: string;
 };
 
-function FormList({ title, fields, onSubmit, submitText }: FormProps) {
+function FormList({ title, fields, onSubmit, submitText, onCancel, cancelText }: FormProps) {
   async function handleSubmit(e: any) {
     e.preventDefault();
     onSubmit?.(
