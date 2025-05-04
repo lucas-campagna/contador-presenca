@@ -1,8 +1,12 @@
 import { useState } from "react";
 
+export type OptionType = string | {
+  value: string;
+  label: string;
+}
 export type SelectPropsType = {
   label?: string;
-  options: string[];
+  options: OptionType[];
 } & React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLSelectElement>,
   HTMLSelectElement
@@ -23,7 +27,9 @@ function Select({ options, value: initialValue, label, ...props }: SelectPropsTy
         onChange={(e) => setValue(e.target.value)}
       >
         {options.map((opt, i) => (
-          <option value={opt} key={i}>{opt}</option>
+          typeof opt === 'string'
+            ? <option value={opt} key={i}>{opt}</option>
+            : <option value={opt.value} key={i}>{opt.label}</option>
         ))}
       </select>
     </div>
