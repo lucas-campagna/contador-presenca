@@ -2,6 +2,7 @@ import { getAuth } from "firebase/auth";
 import { DocumentReference } from "firebase/firestore";
 import firestore, { DocumentRequest } from "./firestore";
 import Base from "./base";
+import { DataBaseError, NotSignedIn } from "../errors";
 
 // TODO
 // @ts-ignore
@@ -13,7 +14,7 @@ class Escola extends Base {
 
   static get _path() {
     if (!this._folder) {
-      throw "Folder not defined";
+      throw DataBaseError();
     }
     if (!this._pathSaved) {
       this._pathSaved = Escola.ref.path;
@@ -28,7 +29,7 @@ class Escola extends Base {
     const auth = getAuth();
     const uid = auth.currentUser?.uid as string;
     if (!uid) {
-      throw "Não logou ainda";
+      throw NotSignedIn();
     }
     Escola._savedRef = firestore<DocumentRequest>(`escolas/${uid}`).ref;
     return Escola._savedRef;

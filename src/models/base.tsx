@@ -19,7 +19,7 @@ class Base {
       return this._pathSaved;
     }
     if (!this._folder) {
-      throw InvalidReferenceToFirestore;
+      throw InvalidReferenceToFirestore();
     }
     this._pathSaved = `${getEscolaRef().path}${this._folder}`;
     return this._pathSaved;
@@ -34,7 +34,7 @@ class Base {
     idOrRef?: IdOrRefType
   ) {
     if (!idOrRef) {
-      throw InvalidReferenceToFirestore;
+      throw InvalidReferenceToFirestore();
     }
     if (idOrRef instanceof DocumentReference) {
       const ref = idOrRef as DocumentReference;
@@ -101,7 +101,7 @@ class Base {
         return this.build(obj);
       }
     }
-    throw InvalidReferenceToFirestore;
+    throw InvalidReferenceToFirestore();
   }
 
   static async build<T extends typeof Base, U extends Base>(

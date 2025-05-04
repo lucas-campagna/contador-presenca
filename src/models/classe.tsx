@@ -53,7 +53,7 @@ class Classe extends Base {
         this.presencas[date].push(aluno);
       }
     } else {
-      throw DataBaseError;
+      throw DataBaseError();
     }
   }
 
