@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-type SelectPropsType = {
+export type SelectPropsType = {
   label?: string;
   options: string[];
 } & React.DetailedHTMLProps<
@@ -22,8 +22,8 @@ function Select({ options, value: initialValue, label, ...props }: SelectPropsTy
         value={value}
         onChange={(e) => setValue(e.target.value)}
       >
-        {options.map((opt) => (
-          <option value={opt}>{opt}</option>
+        {options.map((opt, i) => (
+          <option value={opt} key={i}>{opt}</option>
         ))}
       </select>
     </div>
