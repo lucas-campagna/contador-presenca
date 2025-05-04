@@ -78,7 +78,7 @@ class Base {
   }
 
   static async clear<T extends typeof Base>(this: T) {
-    this.rm(Object.keys(await this.list()));
+    (await this.list()).forEach(e => e.rm());
   }
 
   static async get<T extends typeof Base, U extends Base>(
