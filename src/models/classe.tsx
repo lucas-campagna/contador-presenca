@@ -2,6 +2,7 @@ import { DocumentReference } from "firebase/firestore";
 import Aluno from "./aluno";
 import Base from "./base";
 import { formatDate } from "../utils";
+import { DataBaseError } from "../errors";
 
 type AlunoRef = DocumentReference;
 type ClasseRemote = Classe & {
@@ -52,9 +53,7 @@ class Classe extends Base {
         this.presencas[date].push(aluno);
       }
     } else {
-      throw new Error(
-        "Trying to add attendance of student not listed to this class"
-      );
+      throw DataBaseError;
     }
   }
 

@@ -1,6 +1,7 @@
 import { getRef as getEscolaRef } from "./escola";
 import { DocumentReference } from "firebase/firestore";
 import firestore, { CollectionRequest, DocumentRequest } from "./firestore";
+import { InvalidReferenceToFirestore } from "../errors";
 
 type IdOrRefType = string | DocumentReference;
 
@@ -18,7 +19,7 @@ class Base {
       return this._pathSaved;
     }
     if (!this._folder) {
-      throw new Error("Folder not defined");
+      throw InvalidReferenceToFirestore;
     }
     this._pathSaved = `${getEscolaRef().path}${this._folder}`;
     return this._pathSaved;
@@ -33,7 +34,7 @@ class Base {
     idOrRef?: IdOrRefType
   ) {
     if (!idOrRef) {
-      throw new Error("Requesting doc without ref or id");
+      throw InvalidReferenceToFirestore;
     }
     if (idOrRef instanceof DocumentReference) {
       const ref = idOrRef as DocumentReference;
@@ -100,7 +101,7 @@ class Base {
         return this.build(obj);
       }
     }
-    throw new Error("Id or Ref not found");
+    throw InvalidReferenceToFirestore;
   }
 
   static async build<T extends typeof Base, U extends Base>(
