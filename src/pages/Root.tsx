@@ -24,7 +24,7 @@ function Root() {
   }, [isSignedIn, location]);
 
   return (
-    <div className="flex flex-col items-strech justify-start h-screen w-screen bg-gray-100 overflow-y-hidden">
+    <div className="flex flex-col items-strech justify-start h-screen w-screen bg-light overflow-y-hidden">
       <Outlet />
     </div>
   );
