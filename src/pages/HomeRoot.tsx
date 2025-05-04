@@ -27,13 +27,13 @@ function HomeRoot() {
         <h1>Sair da conta?</h1>
         <div className="flex flex-row gap-2">
           <Button
-            text={"Sim"}
+            label={"Sim"}
             onClick={() => {
               signOut();
               closeDialog();
             }}
           />
-          <Button text={"Não"} onClick={() => closeDialog()} />
+          <Button label={"Não"} onClick={() => closeDialog()} />
         </div>
       </div>
     );

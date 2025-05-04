@@ -28,7 +28,7 @@ function Alunos() {
         body={[aluno.nome, aluno.sexo as string]}
         actions={[
           {
-            text: "Remover",
+            label: "Remover",
             onClick: () => {
               aluno.rm();
               closeDialog();
@@ -70,12 +70,12 @@ function Alunos() {
           .sort((a, b) => (a.nome < b.nome ? -1 : 0))
           .map((aluno) => (
             <Button
-              text={aluno.nome}
+              label={aluno.nome}
               key={aluno.id}
               onClick={() => handleClickAluno(aluno)}
             />
           ))}
-        <Button text="+" onClick={handleAddAluno} />
+        <Button label="+" onClick={handleAddAluno} />
       </>
     </ListItem>
   );

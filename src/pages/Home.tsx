@@ -8,19 +8,19 @@ function Home() {
   return (
     <ListItem>
       <Button
-        text="Marcar Presenças"
+        label="Marcar Presenças"
         onClick={() => navigate("/admin/presencas")}
       />
       <Button
-        text="Criar Turma"
+        label="Criar Turma"
         onClick={() => navigate("/admin/criar-turma")}
       />
       <Button
-        text="Alunos"
+        label="Alunos"
         onClick={() => navigate("/admin/alunos")}
       />
       <Button
-        text="Registrar Professor"
+        label="Registrar Professor"
         onClick={() => navigate("/admin/registrar-professor")}
       />
     </ListItem>

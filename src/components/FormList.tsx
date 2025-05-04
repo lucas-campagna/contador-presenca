@@ -33,7 +33,7 @@ function FormList({ title, fields, onSubmit, submitText }: FormProps) {
           <Type name={name} disabled={!onSubmit} {...props} key={i} />
         ))}
       </>
-      {onSubmit && <Button text={submitText ?? "Ok"} type="submit" />}
+      {onSubmit && <Button label={submitText ?? "Ok"} type="submit" />}
     </form>
   );
 }
