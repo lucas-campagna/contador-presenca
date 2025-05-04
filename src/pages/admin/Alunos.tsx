@@ -5,7 +5,7 @@ import Button from "../../components/Button";
 import useDialog from "../../hooks/useDialog";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
-import CardInfo from "../../components/DialogInfo";
+import CardInfo from "../../components/CardInfo";
 import FormList from "../../components/FormList";
 
 function Alunos() {
