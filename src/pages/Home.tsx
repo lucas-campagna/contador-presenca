@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router";
 import Button from "../components/Button";
-import ListItem from "../components/ListItem";
+import ListContainer from "../components/ListContainer";
 
 function Home() {
   const navigate = useNavigate();
 
   return (
-    <ListItem>
+    <ListContainer>
       <Button
         label="Marcar Presenças"
         onClick={() => navigate("/admin/presencas")}
@@ -23,7 +23,7 @@ function Home() {
         label="Registrar Professor"
         onClick={() => navigate("/admin/registrar-professor")}
       />
-    </ListItem>
+    </ListContainer>
   );
 }
 

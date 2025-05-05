@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Aluno from "../../models/aluno";
-import ListItem from "../../components/ListItem";
+import ListContainer from "../../components/ListContainer";
 import Button from "../../components/Button";
 import useDialog from "../../hooks/useDialog";
 import Input from "../../components/Input";
@@ -64,7 +64,7 @@ function Alunos() {
   }
 
   return (
-    <ListItem>
+    <ListContainer>
       <>
         {alunos
           .sort((a, b) => (a.nome < b.nome ? -1 : 0))
@@ -77,7 +77,7 @@ function Alunos() {
           ))}
         <Button label="+" onClick={handleAddAluno} />
       </>
-    </ListItem>
+    </ListContainer>
   );
 }
 

@@ -61,7 +61,7 @@ function Presencas() {
     </div>
   );
 
-  const ListItem = ({
+  const ListContainer = ({
     item,
     checked,
     onClick,
@@ -87,7 +87,7 @@ function Presencas() {
       <>
         {classe?.alunos &&
           Object.entries(classe.alunos).map(([key, aluno]) => (
-            <ListItem
+            <ListContainer
               key={key}
               item={aluno}
               checked={classe.presencas.includes(key)}
@@ -101,7 +101,7 @@ function Presencas() {
             />
           ))}
       </>
-      <ListItem item="+" checked onClick={handleAddStudent} />
+      <ListContainer item="+" checked onClick={handleAddStudent} />
     </div>
   );
 
