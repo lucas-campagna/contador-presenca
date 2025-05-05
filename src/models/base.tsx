@@ -46,7 +46,7 @@ class Base {
     }
   }
 
-  static async list<T extends typeof Base, U extends Base>(this: T): Promise<U[]> {
+  static async list<T extends typeof Base, U extends Base>(this: T): Promise<(U | void)[]> {
     return Promise.all((await this._coll().docsRef()).map(d => this.get<T, U>(d)));
   }
 
@@ -78,13 +78,13 @@ class Base {
   }
 
   static async clear<T extends typeof Base>(this: T) {
-    (await this.list()).forEach(e => e.rm());
+    (await this.list()).forEach(e => e?.rm());
   }
 
   static async get<T extends typeof Base, U extends Base>(
     this: T,
     idOrRef: IdOrRefType
-  ): Promise<U> {
+  ): Promise<U | void> {
     if (idOrRef instanceof DocumentReference) {
       const ref = idOrRef;
       const obj = await this._doc<U>(ref).get();
@@ -92,7 +92,8 @@ class Base {
         obj.ref = ref;
         return this.build(obj);
       }
-    } else if(typeof idOrRef === 'string') {
+      return;
+    } else if (typeof idOrRef === 'string') {
       const id = idOrRef;
       const req = this._doc<U>(id);
       const obj = await req.get();
@@ -100,6 +101,7 @@ class Base {
         obj.ref = req.ref;
         return this.build(obj);
       }
+      return;
     }
     throw InvalidReferenceToFirestore();
   }
@@ -120,16 +122,19 @@ class Base {
     return other as typeof this;
   }
 
-  _assign<T extends Base>(this: T, other: Partial<T>): void {
+  _assign<T extends Base, U extends typeof Base>(this: T, other: Partial<T>): void {
     if (other.id && !other.ref) {
-      other.ref = this._doc().ref;
+      const self = this.constructor as U;
+      other.ref = self._doc(other.id).ref;
+      // TODO
+      delete (other as any).id;
     }
     Object.assign(this, other);
   }
 
   _doc<T extends Base, U extends typeof Base>(this: T) {
     const self = this.constructor as U;
-    return self._doc<T>(this.ref);
+    return self._doc<T>(this.ref ?? this.id);
   }
 
   async push<U extends typeof Base>() {
@@ -157,6 +162,16 @@ class Base {
   async rm<T extends typeof Base>() {
     const self = this.constructor as T;
     this.ref && (await self._doc<this>(this.ref).rm());
+  }
+
+  toObject(): any {
+    const obj: any = {};
+    for (const field in this){
+      obj[field] = this[field];
+    }
+    obj.id = this?.ref?.id;
+    delete obj?.ref;
+    return obj;
   }
 }
 
